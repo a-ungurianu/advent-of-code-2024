@@ -17,6 +17,34 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
+    let mul_finder = Regex::new(r"don\'t\(\)()()|do\(\)()()|mul\((\d+),(\d+)\)").unwrap();
+
+    let mut enabled = true;
+    let res = mul_finder
+        .captures_iter(input)
+        .map(|caps| {
+            match caps.extract() {
+                ("do()", _) => {
+                    enabled = true;
+                    0
+                }
+                ("don't()", _) => {
+                    enabled = false;
+                    0
+                }
+                (_, [a_s, b_s]) => {
+                    if enabled {
+                        a_s.parse::<u32>().unwrap() * b_s.parse::<u32>().unwrap()
+                    }
+                    else {
+                        0
+                    }
+                }
+            }
+        })
+        .sum();
+
+    Some(res)
 }
 
 #[cfg(test)]
