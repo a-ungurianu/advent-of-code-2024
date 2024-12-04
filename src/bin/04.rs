@@ -161,7 +161,6 @@ pub fn part_two(input: &str) -> Option<u32> {
                     if (grid[&(&here + (-1, 1))] == b'M' && grid[&(&here + (1, -1))] == b'S')
                         || (grid[&(&here + (-1, 1))] == b'S' && grid[&(&here + (1, -1))] == b'M')
                     {
-                        println!("X found: {:?}", here);
                         count += 1;
                     }
                 }
