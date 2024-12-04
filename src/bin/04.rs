@@ -147,6 +147,28 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
+    let grid: Vec<_> = input.lines().collect();
+
+    let mut count: u32 = 0;
+
+    for row in 1..(grid.len() - 1) {
+        for col in 1..(grid.len() - 1) {
+            let here = Point(row, col);
+            if grid[&here] == b'A' {
+                if (grid[&(&here + (-1, -1))] == b'M' && grid[&(&here + (1, 1))] == b'S')
+                    || (grid[&(&here + (-1, -1))] == b'S' && grid[&(&here + (1, 1))] == b'M')
+                {
+                    if (grid[&(&here + (-1, 1))] == b'M' && grid[&(&here + (1, -1))] == b'S')
+                        || (grid[&(&here + (-1, 1))] == b'S' && grid[&(&here + (1, -1))] == b'M')
+                    {
+                        println!("X found: {:?}", here);
+                        count += 1;
+                    }
+                }
+            }
+        }
+    }
+    Some(count)
 }
 
 #[cfg(test)]
