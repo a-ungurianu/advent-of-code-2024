@@ -1,6 +1,6 @@
 pub mod template;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Point(pub i32, pub i32);
 
 impl std::ops::Add<(i32, i32)> for &Point {
