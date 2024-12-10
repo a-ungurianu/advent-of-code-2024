@@ -1,32 +1,8 @@
-use std::ops::Index;
+use advent_of_code::*;
 
 advent_of_code::solution!(4);
 
-#[derive(Debug)]
-struct Point(usize, usize);
-
-impl std::ops::Add<(i32, i32)> for &Point {
-    type Output = Point;
-
-    fn add(self, rhs: (i32, i32)) -> Self::Output {
-        Point(
-            (self.0 as i32 + rhs.0) as usize,
-            (self.1 as i32 + rhs.1) as usize,
-        )
-    }
-}
-
-type Grid<'a> = Vec<&'a str>;
-
-impl Index<&Point> for Grid<'_> {
-    type Output = u8;
-
-    fn index(&self, index: &Point) -> &Self::Output {
-        &self[index.0].as_bytes()[index.1]
-    }
-}
-
-fn count_vertical(grid: &Vec<&str>, needle: &str) -> u32 {
+fn count_vertical(grid: &Grid, needle: &str) -> u32 {
     let mut count: u32 = 0;
     for row in 0..=(grid.len() - needle.len()) {
         for col in 0..grid[0].len() {
@@ -53,7 +29,7 @@ fn count_vertical(grid: &Vec<&str>, needle: &str) -> u32 {
     count
 }
 
-fn count_horizontal(grid: &Vec<&str>, needle: &str) -> u32 {
+fn count_horizontal(grid: &Grid, needle: &str) -> u32 {
     let mut count: u32 = 0;
     for row in 0..grid.len() {
         for col in 0..=(grid[0].len() - needle.len()) {
@@ -80,7 +56,7 @@ fn count_horizontal(grid: &Vec<&str>, needle: &str) -> u32 {
     count
 }
 
-fn count_diagonal(grid: &Vec<&str>, needle: &str) -> u32 {
+fn count_diagonal(grid: &Grid, needle: &str) -> u32 {
     let mut count: u32 = 0;
     for row in 0..=(grid.len() - needle.len()) {
         for col in 0..=(grid[0].len() - needle.len()) {
@@ -107,7 +83,7 @@ fn count_diagonal(grid: &Vec<&str>, needle: &str) -> u32 {
     count
 }
 
-fn count_other_diagonal(grid: &Vec<&str>, needle: &str) -> u32 {
+fn count_other_diagonal(grid: &Grid, needle: &str) -> u32 {
     let mut count: u32 = 0;
     for row in (needle.len() - 1)..grid.len() {
         for col in 0..=(grid[0].len() - needle.len()) {
@@ -134,7 +110,7 @@ fn count_other_diagonal(grid: &Vec<&str>, needle: &str) -> u32 {
     count
 }
 
-fn count_word(grid: Vec<&str>, needle: &str) -> u32 {
+fn count_word(grid: Grid, needle: &str) -> u32 {
     return count_vertical(&grid, needle)
         + count_diagonal(&grid, needle)
         + count_other_diagonal(&grid, needle)
