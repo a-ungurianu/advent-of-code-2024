@@ -6,7 +6,7 @@ fn count_vertical(grid: &Grid, needle: &str) -> u32 {
     let mut count: u32 = 0;
     for row in 0..=(grid.len() - needle.len()) {
         for col in 0..grid[0].len() {
-            let start = Point(row, col);
+            let start = Point(row as i32, col as i32);
             let mut is_needle = true;
             let mut is_needle_reversed = true;
             for k in 0..needle.len() {
@@ -33,7 +33,7 @@ fn count_horizontal(grid: &Grid, needle: &str) -> u32 {
     let mut count: u32 = 0;
     for row in 0..grid.len() {
         for col in 0..=(grid[0].len() - needle.len()) {
-            let start = Point(row, col);
+            let start = Point(row as i32, col as i32);
             let mut is_needle = true;
             let mut is_needle_reversed = true;
             for k in 0..needle.len() {
@@ -60,7 +60,7 @@ fn count_diagonal(grid: &Grid, needle: &str) -> u32 {
     let mut count: u32 = 0;
     for row in 0..=(grid.len() - needle.len()) {
         for col in 0..=(grid[0].len() - needle.len()) {
-            let start = Point(row, col);
+            let start = Point(row as i32, col as i32);
             let mut is_needle = true;
             let mut is_needle_reversed = true;
             for k in 0..needle.len() {
@@ -87,7 +87,7 @@ fn count_other_diagonal(grid: &Grid, needle: &str) -> u32 {
     let mut count: u32 = 0;
     for row in (needle.len() - 1)..grid.len() {
         for col in 0..=(grid[0].len() - needle.len()) {
-            let start = Point(row, col);
+            let start = Point(row as i32, col as i32);
             let mut is_needle = true;
             let mut is_needle_reversed = true;
             for k in 0..needle.len() {
@@ -129,7 +129,7 @@ pub fn part_two(input: &str) -> Option<u32> {
 
     for row in 1..(grid.len() - 1) {
         for col in 1..(grid.len() - 1) {
-            let here = Point(row, col);
+            let here = Point(row as i32, col as i32);
             if grid[&here] == b'A' {
                 if (grid[&(&here + (-1, -1))] == b'M' && grid[&(&here + (1, 1))] == b'S')
                     || (grid[&(&here + (-1, -1))] == b'S' && grid[&(&here + (1, 1))] == b'M')
