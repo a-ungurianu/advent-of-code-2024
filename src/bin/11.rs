@@ -1,29 +1,29 @@
-use std::collections::VecDeque;
+use std::collections::HashMap;
 
 advent_of_code::solution!(11);
 
-fn count_stones(start_stones: Vec<u64>, blinks: u32) -> u32 {
-    let mut stones = VecDeque::from_iter(start_stones.iter().map(|stone| (*stone, blinks)));
-
-    loop {
-        match stones.pop_front() {
-            Some((_, 0)) => break,
-            Some((stone, blinks_remaining)) => {
-                if stone == 0 {
-                    stones.push_back((1, blinks_remaining - 1));
-                } else if (stone.ilog10() + 1) % 2 == 0 {
-                    // ilog10 floors the result, so we want to adjust
-                    let split_10 = (10 as u64).pow((stone.ilog10() + 1) / 2);
-                    stones.push_back((stone / split_10, blinks_remaining - 1));
-                    stones.push_back((stone % split_10, blinks_remaining - 1));
-                } else {
-                    stones.push_back((stone * 2024, blinks_remaining - 1));
-                }
-            }
-            None => break,
-        }
+fn count_stones(start_stones: Vec<u64>, blinks: u32) -> u64 {
+    let mut state: HashMap<u64, u64> = HashMap::new();
+    for stone in start_stones {
+        *state.entry(stone).or_default() += 1;
     }
-    (stones.len() + 1) as u32
+    for _ in 0..blinks {
+        let mut new_state: HashMap<u64, u64> = HashMap::new();
+        for (stone, amount) in state {
+            if stone == 0 {
+                *new_state.entry(1).or_default() += amount;
+            } else if (stone.ilog10() + 1) % 2 == 0 {
+                // ilog10 floors the result, so we want to adjust
+                let split_10 = (10 as u64).pow((stone.ilog10() + 1) / 2);
+                *new_state.entry(stone / split_10).or_default() += amount;
+                *new_state.entry(stone % split_10).or_default() += amount;
+            } else {
+                *new_state.entry(stone * 2024).or_default() += amount;
+            }
+        }
+        state = new_state;
+    }
+    state.values().sum()
 }
 
 fn parse_input(input: &str) -> Vec<u64> {
@@ -33,11 +33,11 @@ fn parse_input(input: &str) -> Vec<u64> {
         .collect()
 }
 
-pub fn part_one(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u64> {
     Some(count_stones(parse_input(input), 25))
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_two(input: &str) -> Option<u64> {
     Some(count_stones(parse_input(input), 75))
 }
 
