@@ -11,6 +11,14 @@ impl std::ops::Add<(i32, i32)> for &Point {
     }
 }
 
+impl std::ops::Add<Point> for &Point {
+    type Output = Point;
+
+    fn add(self, rhs: Point) -> Self::Output {
+        Point(self.0 + rhs.0, self.1 + rhs.1)
+    }
+}
+
 impl std::ops::Sub<&Point> for &Point {
     type Output = Point;
 
