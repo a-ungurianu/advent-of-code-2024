@@ -44,3 +44,24 @@ impl std::ops::Index<&Point> for Grid<'_> {
         &self[index.0 as usize].as_bytes()[index.1 as usize]
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::hash::{DefaultHasher, Hash, Hasher};
+
+    use super::*;
+
+    #[test]
+    fn hash_p_order() {
+        let p_01 = Point(0,1);
+        let p_10 = Point(1,0);
+
+        let mut d_01 = DefaultHasher::new();
+        p_01.hash(&mut d_01);
+
+        let mut d_10 = DefaultHasher::new();
+        p_10.hash(&mut d_10);
+
+        assert_ne!(d_01.finish(), d_10.finish())
+    }
+}
